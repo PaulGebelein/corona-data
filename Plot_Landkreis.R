@@ -19,8 +19,25 @@ data_kreis_plot <- data_kreis_plot[c("Meldedatum", "AnzahlFall")]
 # Aggregate data
 sum_data_kreis <- aggregate(data_kreis_plot["AnzahlFall"], by=data_kreis_plot["Meldedatum"], sum)
 
+# Calculate "7-Tage Inzidenz"
+sum_data_kreis["Inzidenz"] <- NA
+rows <- nrow(sum_data_kreis)
+rowcount <- c(7:rows)
+
+for (i in rowcount) {
+        temp <- sum_data_kreis[(i-6):i, "AnzahlFall"]
+        temp <- sum(temp)
+        temp <- temp/7.5
+        sum_data_kreis[i, "Inzidenz"] <- temp
+}
+
 # Plot data
 p <- ggplot(sum_data_kreis, aes(x=Meldedatum, y=AnzahlFall)) +
         geom_line() + 
         xlab("")
 p
+
+q <- ggplot(sum_data_kreis, aes(x=Meldedatum, y=Inzidenz)) +
+        geom_line() + 
+        xlab("")
+q
