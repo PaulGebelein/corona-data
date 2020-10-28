@@ -4,7 +4,7 @@ This repository is a collection of R scripts to make sense of RKI corona data.
 Dieses Repo ist eine Sammlung von R Skripten, die für die Auswertung des RKI Coronadatensets.
 
 ## Skripte
-Plot_Landkreis.R
+**Plot_Landkreis.R**
 
 *"Wie ist die Lage in meinem Kreis?"*
 
