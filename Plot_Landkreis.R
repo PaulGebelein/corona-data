@@ -12,36 +12,42 @@ data <- read.csv("https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0
 data_kreis <- filter(data, Landkreis == Kreis)
 
 # Subset date and cases
-data_kreis_plot <- select(data_kreis, c(AnzahlFall, Meldedatum))
+data_kreis_faelle <- select(data_kreis, c(Meldedatum, AnzahlFall))
+data_kreis_todesfaelle <- select(data_kreis, c(Meldedatum, AnzahlTodesfall))
 
 # Fix dates
-data_kreis_plot$Meldedatum <- as.POSIXct(data_kreis_plot$Meldedatum, format="%Y/%m/%d %H:%M:%S")
-
-# Swap columns
-data_kreis_plot <- data_kreis_plot[c("Meldedatum", "AnzahlFall")]
+data_kreis_faelle$Meldedatum <- as.POSIXct(data_kreis_faelle$Meldedatum, format="%Y/%m/%d %H:%M:%S")
+data_kreis_todesfaelle$Meldedatum <- as.POSIXct(data_kreis_todesfaelle$Meldedatum, format="%Y/%m/%d %H:%M:%S")
 
 # Aggregate data
-sum_data_kreis <- aggregate(data_kreis_plot["AnzahlFall"], by=data_kreis_plot["Meldedatum"], sum)
+data_kreis_faelle <- aggregate(data_kreis_faelle["AnzahlFall"], by=data_kreis_faelle["Meldedatum"], sum)
+data_kreis_todesfaelle <- aggregate(data_kreis_todesfaelle["AnzahlTodesfall"], by=data_kreis_todesfaelle["Meldedatum"], sum)
+
 
 # Calculate "7-Tage Inzidenz"
-sum_data_kreis["Inzidenz"] <- NA
+data_kreis_faelle["Inzidenz"] <- NA
 rows <- nrow(sum_data_kreis)
 rowcount <- c(7:rows)
 
 for (i in rowcount) {
-        temp <- sum_data_kreis[(i-6):i, "AnzahlFall"]
+        temp <- data_kreis_faelle[(i-6):i, "AnzahlFall"]
         temp <- sum(temp)
         temp <- temp/(Einwohnerzahl/100000)
-        sum_data_kreis[i, "Inzidenz"] <- temp
+        data_kreis_faelle[i, "Inzidenz"] <- temp
 }
 
 # Plot data
-p <- ggplot(sum_data_kreis, aes(x=Meldedatum, y=AnzahlFall)) +
+p <- ggplot(data_kreis_faelle, aes(x=Meldedatum, y=AnzahlFall)) +
         geom_line() + 
         xlab("")
 p
 
-q <- ggplot(sum_data_kreis, aes(x=Meldedatum, y=Inzidenz)) +
+q <- ggplot(data_kreis_todesfaelle, aes(x=Meldedatum, y=AnzahlTodesfall)) +
         geom_line() + 
         xlab("")
 q
+
+r <- ggplot(data_kreis_faelle, aes(x=Meldedatum, y=Inzidenz)) +
+        geom_line() + 
+        xlab("")
+r
