@@ -1,11 +1,15 @@
 library(ggplot2)
 library(dplyr)
 
+# Specify Kreis und Einwohnerzahl
+Kreis <- "SK Frankfurt am Main"
+Einwohnerzahl <- 750000
+
 # Fetch data
 data <- read.csv("https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv", stringsAsFactors=FALSE)
 
 # Subset data from Frankfurt
-data_kreis <- filter(data, Landkreis == "SK Frankfurt am Main")
+data_kreis <- filter(data, Landkreis == Kreis)
 
 # Subset date and cases
 data_kreis_plot <- select(data_kreis, c(AnzahlFall, Meldedatum))
@@ -27,7 +31,7 @@ rowcount <- c(7:rows)
 for (i in rowcount) {
         temp <- sum_data_kreis[(i-6):i, "AnzahlFall"]
         temp <- sum(temp)
-        temp <- temp/7.5
+        temp <- temp/(Einwohnerzahl/100000)
         sum_data_kreis[i, "Inzidenz"] <- temp
 }
 
