@@ -9,7 +9,7 @@ Einwohnerzahl <- 750000
 data <- read.csv("https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv", stringsAsFactors=FALSE)
 
 # Subset data from Frankfurt
-data_kreis <- filter(data, Landkreis == Kreis)
+data_kreis<- filter(data, Landkreis == Kreis)
 
 # Subset date and cases
 data_kreis_faelle <- select(data_kreis, c(Meldedatum, AnzahlFall))
@@ -26,7 +26,7 @@ data_kreis_todesfaelle <- aggregate(data_kreis_todesfaelle["AnzahlTodesfall"], b
 
 # Calculate "7-Tage Inzidenz"
 data_kreis_faelle["Inzidenz"] <- NA
-rows <- nrow(sum_data_kreis)
+rows <- nrow(data_kreis_faelle)
 rowcount <- c(7:rows)
 
 for (i in rowcount) {
