@@ -1,9 +1,11 @@
 library(ggplot2)
 library(dplyr)
 
+source("functions.R")
+
 # Specify Kreis und Einwohnerzahl
 Kreis <- "SK Frankfurt am Main"
-Einwohnerzahl <- 750000
+Einwohnerzahl <- 765000
 
 # Fetch data
 data <- read.csv("https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv", stringsAsFactors=FALSE)
@@ -23,18 +25,8 @@ data_kreis_todesfaelle$Meldedatum <- as.POSIXct(data_kreis_todesfaelle$Meldedatu
 data_kreis_faelle <- aggregate(data_kreis_faelle["AnzahlFall"], by=data_kreis_faelle["Meldedatum"], sum)
 data_kreis_todesfaelle <- aggregate(data_kreis_todesfaelle["AnzahlTodesfall"], by=data_kreis_todesfaelle["Meldedatum"], sum)
 
-
-# Calculate "7-Tage Inzidenz"
-data_kreis_faelle["Inzidenz"] <- NA
-rows <- nrow(data_kreis_faelle)
-rowcount <- c(7:rows)
-
-for (i in rowcount) {
-        temp <- data_kreis_faelle[(i-6):i, "AnzahlFall"]
-        temp <- sum(temp)
-        temp <- temp/(Einwohnerzahl/100000)
-        data_kreis_faelle[i, "Inzidenz"] <- temp
-}
+# Calculate 7-Tages-Inzidenz
+data_kreis_faelle <- Calculate_Inzidenz(data_kreis_faelle, Einwohnerzahl)
 
 # Plot data
 p <- ggplot(data_kreis_faelle, aes(x=Meldedatum, y=AnzahlFall)) +
