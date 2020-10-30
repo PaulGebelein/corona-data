@@ -1,15 +1,15 @@
 # Calculate 7-Tage-Inzidenz
 
-Prepare_data_faelle <- function(filtered_df) {
+Prepare_data_faelle <- function(filtered_df, value) {
         
         # Subset date and cases
-        df <- select(filtered_df, c(Meldedatum, AnzahlFall))
+        df <- select(filtered_df, c(Meldedatum, all_of(value)))
         
         # Fix dates
         df$Meldedatum <- as.POSIXct(df$Meldedatum, format="%Y/%m/%d %H:%M:%S")
         
         # Aggregate data
-        df <- aggregate(df["AnzahlFall"], by=df["Meldedatum"], sum)
+        df <- aggregate(df[value], by=df["Meldedatum"], sum)
         
         return (df)
 }

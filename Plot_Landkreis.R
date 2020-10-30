@@ -11,35 +11,27 @@ Einwohnerzahl <- 765000
 data <- read.csv("https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv", stringsAsFactors=FALSE)
 
 # Subset data from Frankfurt
-data_kreis<- filter(data, Landkreis == Kreis)
+data_kreis <- filter(data, Landkreis == Kreis)
 
-# Subset date and cases
-data_kreis_faelle <- select(data_kreis, c(Meldedatum, AnzahlFall))
-data_kreis_todesfaelle <- select(data_kreis, c(Meldedatum, AnzahlTodesfall))
+# Prepare data for plot
+df_faelle <- Prepare_data_faelle(data_kreis, "AnzahlFall")
+df_faelle <- Calculate_Inzidenz(df_faelle, Einwohnerzahl)
 
-# Fix dates
-data_kreis_faelle$Meldedatum <- as.POSIXct(data_kreis_faelle$Meldedatum, format="%Y/%m/%d %H:%M:%S")
-data_kreis_todesfaelle$Meldedatum <- as.POSIXct(data_kreis_todesfaelle$Meldedatum, format="%Y/%m/%d %H:%M:%S")
+df_todesFaelle <- Prepare_data_faelle(data_kreis, "AnzahlTodesfall")
 
-# Aggregate data
-data_kreis_faelle <- aggregate(data_kreis_faelle["AnzahlFall"], by=data_kreis_faelle["Meldedatum"], sum)
-data_kreis_todesfaelle <- aggregate(data_kreis_todesfaelle["AnzahlTodesfall"], by=data_kreis_todesfaelle["Meldedatum"], sum)
-
-# Calculate 7-Tages-Inzidenz
-data_kreis_faelle <- Calculate_Inzidenz(data_kreis_faelle, Einwohnerzahl)
 
 # Plot data
-p <- ggplot(data_kreis_faelle, aes(x=Meldedatum, y=AnzahlFall)) +
+p <- ggplot(df_faelle, aes(x=Meldedatum, y=AnzahlFall)) +
         geom_line() + 
         xlab("")
 p
 
-q <- ggplot(data_kreis_todesfaelle, aes(x=Meldedatum, y=AnzahlTodesfall)) +
+q <- ggplot(df_todesFaelle, aes(x=Meldedatum, y=AnzahlTodesfall)) +
         geom_line() + 
         xlab("")
 q
 
-r <- ggplot(data_kreis_faelle, aes(x=Meldedatum, y=Inzidenz)) +
+r <- ggplot(df_faelle, aes(x=Meldedatum, y=Inzidenz)) +
         geom_line() + 
         xlab("")
 r

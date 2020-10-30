@@ -24,7 +24,7 @@ results <- vector("list", nrow(input_data))
 
 for (i in 1:nrow(input_data)) {
         df <- filter(data, Altersgruppe == input_data[i, "age_group"])
-        df <- Prepare_data_faelle(df)
+        df <- Prepare_data_faelle(df, "AnzahlFall")
         df <- Calculate_Inzidenz(df, input_data[i, "Einwohnerzahl"])
         results[[i]] <- df
 }
