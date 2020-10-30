@@ -16,7 +16,7 @@ Dieses Skript erzeugt zwei Plots:
 
 Am Anfang des Skripts können die Variablen "Kreis" und "Einwohnerzahl" spezifiziert werden.
 
-**Deutschland_nach_ALter.R**
+**Inzidenz_D_nach_ALter.R**
 
 *"Wie ist die Inzidenz in den jeweiligen Altersgruppen für Deutschland?"*
 

@@ -15,63 +15,53 @@ Einwohnerzahl_80 <- 5681135
 # Fetch data
 data <- read.csv("https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv", stringsAsFactors=FALSE)
 
-# Create df for every agegroup
-agegroup_0_4 <- filter(data, Altersgruppe == 'A00-A04')
-agegroup_5_14 <- filter(data, Altersgruppe == 'A05-A14')
-agegroup_15_34 <- filter(data, Altersgruppe == 'A15-A34')
-agegroup_35_59 <- filter(data, Altersgruppe == 'A35-A59')
-agegroup_60_79 <- filter(data, Altersgruppe == 'A60-A79')
-agegroup_80 <- filter(data, Altersgruppe == 'A80+')
 
-# Prepare dataframe to contain two columns: Meldedatum, Faelle
-agegroup_0_4 <- Prepare_data_faelle(agegroup_0_4)
-agegroup_5_14 <- Prepare_data_faelle(agegroup_5_14)
-agegroup_15_34 <- Prepare_data_faelle(agegroup_15_34)
-agegroup_35_59 <- Prepare_data_faelle(agegroup_35_59)
-agegroup_60_79 <- Prepare_data_faelle(agegroup_60_79)
-agegroup_80 <- Prepare_data_faelle(agegroup_80)
+input_data <- data.frame(age_group=c("A00-A04", "A05-A14", "A15-A34", "A35-A59", "A60-A79", "A80+"),
+                         Einwohnerzahl=c(Einwohnerzahl_0_4, Einwohnerzahl_5_14, Einwohnerzahl_15_34, Einwohnerzahl_35_59, Einwohnerzahl_60_79, Einwohnerzahl_80))
 
-# Add column with Indizenz
-agegroup_0_4 <- Calculate_Inzidenz(agegroup_0_4, Einwohnerzahl_0_4)
-agegroup_5_14 <- Calculate_Inzidenz(agegroup_5_14, Einwohnerzahl_5_14)
-agegroup_15_34 <- Calculate_Inzidenz(agegroup_15_34, Einwohnerzahl_15_34)
-agegroup_35_59 <- Calculate_Inzidenz(agegroup_35_59, Einwohnerzahl_35_59)
-agegroup_60_79 <- Calculate_Inzidenz(agegroup_60_79, Einwohnerzahl_60_79)
-agegroup_80  <- Calculate_Inzidenz(agegroup_80 , Einwohnerzahl_80)
+results <- vector("list", nrow(input_data))
+
+
+for (i in 1:nrow(input_data)) {
+        df <- filter(data, Altersgruppe == input_data[i, "age_group"])
+        df <- Prepare_data_faelle(df)
+        df <- Calculate_Inzidenz(df, input_data[i, "Einwohnerzahl"])
+        results[[i]] <- df
+}
 
 
 # Plot data
-p <- ggplot(agegroup_0_4, aes(x=Meldedatum, y=Inzidenz)) +
+p <- ggplot(results[[1]], aes(x=Meldedatum, y=Inzidenz)) +
         geom_line() + 
         ggtitle("7-Tage-Inzidenz 0-4 Jahre")
         xlab("")
 p
 
-p <- ggplot(agegroup_5_14, aes(x=Meldedatum, y=Inzidenz)) +
-        geom_line() + 
+p <- ggplot(results[[2]], aes(x=Meldedatum, y=Inzidenz)) +
+        geomline() + 
         ggtitle("7-Tage-Inzidenz 15-14 Jahre")
         xlab("")
 p
 
-p <- ggplot(agegroup_15_34, aes(x=Meldedatum, y=Inzidenz)) +
+p <- ggplot(results[[3]], aes(x=Meldedatum, y=Inzidenz)) +
         geom_line() + 
         ggtitle("7-Tage-Inzidenz 15-34 Jahre")
         xlab("")
 p
 
-p <- ggplot(agegroup_35_59, aes(x=Meldedatum, y=Inzidenz)) +
+p <- ggplot(results[[4]], aes(x=Meldedatum, y=Inzidenz)) +
         geom_line() + 
         ggtitle("7-Tage-Inzidenz 35-59 Jahre")
         xlab("")
 p
 
-p <- ggplot(agegroup_60_79, aes(x=Meldedatum, y=Inzidenz)) +
+p <- ggplot(results[[5]], aes(x=Meldedatum, y=Inzidenz)) +
         geom_line() + 
         ggtitle("7-Tage-Inzidenz 60-79 Jahre")
         xlab("")
 p
 
-p <- ggplot(agegroup_80, aes(x=Meldedatum, y=Inzidenz)) +
+p <- ggplot(results[[6]], aes(x=Meldedatum, y=Inzidenz)) +
         geom_line() + 
         ggtitle("7-Tage-Inzidenz 80+ Jahre")
         xlab("")
