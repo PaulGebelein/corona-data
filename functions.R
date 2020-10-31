@@ -22,7 +22,7 @@ Calculate_Inzidenz <- function(data_faelle, Einwohnerzahl) {
         
         for (i in rowcount) {
                 data_faelle[i, "Inzidenz"] <- data_faelle[(i-6):i, "AnzahlFall"] %>%
-                        sum()/(Einwohnerzahl/100000)
+                                                sum()/(Einwohnerzahl/100000)
         }
         return(data_faelle)
 }
