@@ -18,6 +18,8 @@ Am Anfang des Skripts können die Variablen "Kreis" und "Einwohnerzahl" spezifiz
 
 **Inzidenz_D_vs_Kreis.R**
 
+*"Wie verhält sich die die Inzidenz meines Kreise zu der von Deutschland?"*
+
 Dieses Skript erzeugt einen Plot, auf dem die Indzidenz für Deutschland und die Indzidenz des gewählten Landkreises im Verlauf verglichen werden.
 
 Am Anfang des Skripts können die Variablen "Kreis" und "Einwohnerzahl" spezifiziert werden.
