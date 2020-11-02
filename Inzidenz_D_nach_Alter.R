@@ -11,10 +11,6 @@ Einwohnerzahl_15_34 <- 19117865
 Einwohnerzahl_35_59 <- 28918594
 Einwohnerzahl_60_79 <- 18057318
 Einwohnerzahl_80 <- 5681135
-        
-# Fetch data
-# data <- read.csv("https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv", stringsAsFactors=FALSE)
-data <- read.csv("https://www.arcgis.com/sharing/rest/content/items/f10774f1c63e40168479a1feb6c7ca74/data", stringsAsFactors=FALSE)
 
 
 input_data <- data.frame(age_group=c("A00-A04", "A05-A14", "A15-A34", "A35-A59", "A60-A79", "A80+"),
@@ -25,7 +21,7 @@ results <- vector("list", nrow(input_data))
 
 for (i in 1:nrow(input_data)) {
         
-        results[[i]] <- filter(data, Altersgruppe == input_data[i, "age_group"]) %>%
+        results[[i]] <- filter(RKI_csv, Altersgruppe == input_data[i, "age_group"]) %>%
                         Prepare_data_faelle(., "AnzahlFall") %>%
                         Calculate_Inzidenz(., input_data[i, "Einwohnerzahl"])
 }

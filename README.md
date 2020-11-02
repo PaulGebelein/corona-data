@@ -4,6 +4,12 @@ This repository is a collection of R scripts to make sense of RKI corona data.
 Es gibt viele verschiedene und tolle Statistiken zu Covid-19. Gute Auswertungen für einen bestimmten Landkreis findet man allerdings selten. In diesem Repo sind Skripte, die Plots für einen Landkreis erzeugen.
 
 ## Skripte
+
+**First_run_this.R**
+
+Diese Skript lädt die offizielle csv des Tages des RKI herunter. Siehe unten bei "Verwendete Datenquellen". Dieses Skript muss einmal vor allen anderen Skripten ausgeführt werden.
+
+
 **Plot_Landkreis.R**
 
 *"Wie ist die Lage in meinem Kreis?"*
