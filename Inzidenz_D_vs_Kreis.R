@@ -15,7 +15,7 @@ data_kreis <- filter(RKI_csv, Landkreis == Kreis)
 data_kreis_faelle <- Prepare_data_faelle(data_kreis, "AnzahlFall")
 data_kreis_faelle <- Calculate_Inzidenz(data_kreis_faelle, Einwohnerzahl)
 
-data_faelle <- Prepare_data_faelle(data, "AnzahlFall")
+data_faelle <- Prepare_data_faelle(RKI_csv, "AnzahlFall")
 data_faelle <- Calculate_Inzidenz(data_faelle, Einwohnerzahl_D)
 
 
