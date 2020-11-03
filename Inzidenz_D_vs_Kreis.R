@@ -32,7 +32,6 @@ p <- ggplot() +
 p
 
 q <- ggplot() +
-        geom_line(data_ratio, aes(x=Meldedatum, y=Ratio)) + 
+        geom_line(data=data_ratio, aes(x=Meldedatum, y=Ratio)) + 
         ggtitle("Anteil der Fälle im Kreis zu Gesamtdeutschland")
-        xlab("")
 q
